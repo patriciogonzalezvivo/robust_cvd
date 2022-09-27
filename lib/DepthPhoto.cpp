@@ -131,7 +131,7 @@ void DepthPhoto::Intrinsics::resolveMissingFov(
 
   if (!isVerticalFovSet && !isHorizontalFovSet) {
     if (!silent) {
-      LOG(INFO) << "Field of view is not set, using default values.";
+      std::cout << std::endl << "Field of view is not set, using default values.";
     }
     // If neither value is set, set the fov of the shorter side to the
     // default value of the viewing virtual camera.

@@ -6,9 +6,9 @@ import torch
 
 from monodepth.depth_model_registry import get_depth_model, get_depth_model_list
 from depth_fine_tuning import DepthFineTuningParams
-# from scale_calibration import ScaleCalibrationParams
-# from tools.colmap_processor import COLMAPParams
-# from tools.make_video import MakeVideoParams
+from scale_calibration import ScaleCalibrationParams
+from colmap_processor import COLMAPParams
+from make_video import MakeVideoParams
 from utils import frame_sampling, frame_range
 
 from lib_python import DepthVideoPoseOptimizer
@@ -56,12 +56,12 @@ class Video3dParamsParser:
 
         self.add_video_args()
         self.add_flow_args()
-        # self.add_calibration_args()
+        self.add_calibration_args()
         self.add_pose_optimization_args()
         self.add_fine_tuning_args()
         self.add_filter_args()
         self.add_saving_final_results_args()
-        # self.add_export_args()
+        self.add_export_args()
 
         self.initialized = True
 
@@ -89,9 +89,9 @@ class Video3dParamsParser:
         self.parser.add_argument("--vis_flow", action="store_true")
         self.parser.add_argument("--flow_model", choices=["raft"], default="raft")
 
-    # def add_calibration_args(self):
-    #     COLMAPParams.add_arguments(self.parser)
-    #     ScaleCalibrationParams.add_arguments(self.parser)
+    def add_calibration_args(self):
+        COLMAPParams.add_arguments(self.parser)
+        ScaleCalibrationParams.add_arguments(self.parser)
 
     def add_pose_optimization_args(self):
         defaults = DepthVideoPoseOptimizer.Params()
@@ -216,14 +216,14 @@ class Video3dParamsParser:
         self.parser.add_argument("--save_finetuning", action="store_true")
         self.parser.add_argument("--save_vis", action="store_true")
 
-    # def add_export_args(self):
-    #     self.parser.add_argument("--render_depth_streams", type=str, nargs="+")
-    #     self.parser.add_argument("--font_path", type=str)
-    #     self.parser.add_argument("--renderer_shader_path", type=str)
-    #     self.parser.add_argument("--viewer_shader_path", type=str)
-    #     self.parser.add_argument("--effects_shader_path", type=str)
-        # self.parser.add_argument("--make_video", action="store_true")
-        # MakeVideoParams.add_arguments(self.parser)
+    def add_export_args(self):
+        self.parser.add_argument("--render_depth_streams", type=str, nargs="+")
+        self.parser.add_argument("--font_path", type=str)
+        self.parser.add_argument("--renderer_shader_path", type=str)
+        self.parser.add_argument("--viewer_shader_path", type=str)
+        self.parser.add_argument("--effects_shader_path", type=str)
+        self.parser.add_argument("--make_video", action="store_true")
+        MakeVideoParams.add_arguments(self.parser)
 
     def parse(self, args=None, namespace=None):
         if not self.initialized:

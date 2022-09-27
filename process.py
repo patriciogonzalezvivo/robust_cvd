@@ -31,7 +31,7 @@ from lib_python import (
 
 from depth_fine_tuning import DepthFineTuner
 from flow import Flow
-# from scale_calibration import calibrate_scale
+from scale_calibration import calibrate_scale
 from utils.frame_range import FrameRange, OptionalSet
 from utils.helpers import (
     disable_output_stream_buffering,
@@ -176,25 +176,25 @@ class DatasetProcessor:
             frame_range=self.params.frame_range.set, num_frames=self.video.frame_count
         )
 
-        # if self.params.recon == "colmap":
-        #     try:
-        #         print_banner("Scale calibration")
-        #         valid_frames = calibrate_scale(
-        #             self.video, self.out_dir, frame_range, self.params
-        #         )
-        #         new_frame_range = frame_range.intersection(OptionalSet(set(valid_frames)))
-        #         print(
-        #             "Filtered out frames: ",
-        #             sorted(set(frame_range.frames()) - set(new_frame_range.frames())),
-        #         )
+        if self.params.recon == "colmap":
+            # try:
+            print_banner("Scale calibration")
+            valid_frames = calibrate_scale(
+                self.video, self.out_dir, frame_range, self.params
+            )
+            new_frame_range = frame_range.intersection(OptionalSet(set(valid_frames)))
+            print(
+                "Filtered out frames: ",
+                sorted(set(frame_range.frames()) - set(new_frame_range.frames())),
+            )
 
-        #         print("Remaining valid frames: ", valid_frames)
+            print("Remaining valid frames: ", valid_frames)
 
-        #         if len(new_frame_range.frames()) < len(frame_range.frames()):
-        #             raise RuntimeError("COLMAP did not register all frames.")
-        #     except Exception:
-        #         print("Scale calibration failed. Skipping rest of pipeline.")
-        #         return initial_depth_dir, None, frame_range.frames()
+            if len(new_frame_range.frames()) < len(frame_range.frames()):
+                raise RuntimeError("COLMAP did not register all frames.")
+            # except Exception:
+            #     print("Scale calibration failed. Skipping rest of pipeline.")
+            #     return initial_depth_dir, None, frame_range.frames()
 
         print_banner("Fine-tuning")
 

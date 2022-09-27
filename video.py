@@ -12,8 +12,8 @@ from utils import (frame_sampling, image_io)
 from utils.helpers import mkdir_ifnotexists
 
 
-ffmpeg = "/usr/local/bin/ffmpeg"
-ffprobe = "/usr/local/bin/ffprobe"
+ffmpeg = "/usr/bin/ffmpeg"
+ffprobe = "/usr/bin/ffprobe"
 
 
 def sample_pairs(frame_range, flow_ops):
