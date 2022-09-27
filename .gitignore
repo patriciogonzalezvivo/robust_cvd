@@ -1,0 +1,7 @@
+*.ini
+*.swp
+.vscode
+content
+models
+lib/build
+__pycache__
